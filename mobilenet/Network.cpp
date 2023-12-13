@@ -164,12 +164,12 @@ float *Network::Forward(const char *pcName)
 			Max.push_back(pfOutput[i]);
 		}
 	}
-	cout << endl;
-	for (int i = 0; i < argmax.size(); i++)
-	{
-		cout << Max[i] << ": " << argmax[i] << ": " << m_vcClass[argmax[i]] << endl;
-	}
-	cout << endl;
+	//cout << endl;
+	//for (int i = 0; i < argmax.size(); i++)
+	//{
+	//	cout << Max[i] << ": " << argmax[i] << ": " << m_vcClass[argmax[i]] << endl;
+	//}
+	//cout << endl;
     
     return pfOutput;
 }

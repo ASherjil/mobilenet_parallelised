@@ -2,6 +2,9 @@
 #include "Network.h"
 #include <string>
 #include <fstream>
+#include <chrono>
+using namespace std::chrono;
+
 
 float Accuracy_1(float *pfPred, int *pnLab, int nclass)
 {
@@ -56,6 +59,7 @@ void test(const char *pcTestListFile, const char *pcTestLabelsFile, const char *
 
     int i = 0;
 
+    high_resolution_clock::time_point t1 = high_resolution_clock::now();
     if (file && lab)
     {
         while (getline(file, line) && getline(lab, label))
@@ -76,6 +80,8 @@ void test(const char *pcTestListFile, const char *pcTestLabelsFile, const char *
     {
         cout << "no such file" << endl;
     }
+    high_resolution_clock::time_point t2 = high_resolution_clock::now();
+    auto duration = duration_cast<milliseconds>( t2 - t1 ).count();
 
     cout << "i:" << i << endl;
 
@@ -84,8 +90,9 @@ void test(const char *pcTestListFile, const char *pcTestLabelsFile, const char *
 
     cout << "accuracy_1:" << fAccurSum_1 << endl;
     cout << "accuracy_all:" << fAccurSum_all << endl;
+    cout << "Processing time: " << duration << " ms" << endl;
 
-    system("pause");
+    //system("pause");
 	
     // You can use following codes to test only one image
 	//input an image
