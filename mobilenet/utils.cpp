@@ -70,7 +70,6 @@ void test(const char *pcTestListFile, const char *pcTestLabelsFile, const char *
             for (int j = 0; j < 12; j++)
                 nLl[j] = label[2 * j] - '0'; 
             fAccuracy_1 += Accuracy_1(pfPredict, nLl, nClass);
-
             fAccuracy_all += Accuracy_all(pfPredict, nLl, nClass);
             i += 1;
 

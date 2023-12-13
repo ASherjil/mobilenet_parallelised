@@ -4,6 +4,7 @@
 #include <fstream>
 #include <cassert>
 #include <iostream>
+#include <omp.h>
 
 using namespace std;
 
@@ -45,6 +46,11 @@ void ConvLayer::forward(float *pfInput)
 {
     Addpad(pfInput);
 
+
+    //std::cout<<"Convolution layer params m_nGroup "<<m_nGroup<<", m_nOutputGroupNum "<<m_nOutputGroupNum<<", m_nOutputWidth"<<m_nOutputWidth<<", m_nInputGroupNum "
+    //         <<m_nInputGroupNum << ", m_nKernelWidth "<<m_nKernelWidth<<"\n";
+
+    #pragma omp parallel for collapse(3) schedule(guided)
     for (int g = 0; g < m_nGroup; g++)
     {
         for (int nOutmapIndex = 0; nOutmapIndex < m_nOutputGroupNum; nOutmapIndex++)
