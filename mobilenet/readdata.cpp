@@ -4,7 +4,8 @@
 #include <ctime>
 #include <cassert>
 #include <fstream>
-
+#include <filesystem> // Requires C++17
+namespace fs = std::filesystem;
 using namespace std;
 
 ReadData::ReadData(const char *pcMean, int nInputWidth, int nInputHeight, int nInputChannel):
@@ -23,40 +24,35 @@ ReadData::~ReadData()
 	delete[] m_pfMean;
 }
 
-float *ReadData::ReadInput(const char *pcName)
-{
-	cout << "Reading Picture: " << pcName << "..." << endl;
+float* ReadData::ReadInput(const char* pcName) {
+    std::cout << "Reading Picture: " << pcName << "..." << std::endl;
 
-	const char *pstrImageName = pcName;
+    // Use cv::Mat for image representation
+    cv::Mat srcImage = cv::imread(pcName, cv::IMREAD_UNCHANGED);
+    if (srcImage.empty()) {
+        std::cerr << "Error: Image not loaded." << std::endl;
+        return nullptr;
+    }
 
+    // Resize image
+    cv::Mat dstImage;
+    cv::resize(srcImage, dstImage, cv::Size(m_nInputWidth, m_nInputHeight), 0, 0, cv::INTER_LINEAR);
 
-	CvSize czSize;
-	IplImage *pSrcImage = cvLoadImage(pstrImageName, CV_LOAD_IMAGE_UNCHANGED);
-	IplImage *pDstImage = NULL;
-	czSize.width = m_nInputWidth;
-	czSize.height = m_nInputHeight;
+    int nOutputIndex = 0;
 
-	pDstImage = cvCreateImage(czSize, pSrcImage->depth, pSrcImage->nChannels);
-	cvResize(pSrcImage, pDstImage, CV_INTER_LINEAR);
+    for (int i = 0; i < dstImage.rows; i++) {
+        for (int j = 0; j < dstImage.cols; j++) {
+            nOutputIndex = i * m_nInputWidth + j;
+            cv::Vec3b pixel = dstImage.at<cv::Vec3b>(i, j);
+            m_pfInputData[nOutputIndex] = static_cast<float>(pixel[0]) - m_pfMean[nOutputIndex];
+            m_pfInputData[nOutputIndex + m_nImageSize] = static_cast<float>(pixel[1]) - m_pfMean[nOutputIndex + m_nImageSize];
+            m_pfInputData[nOutputIndex + 2 * m_nImageSize] = static_cast<float>(pixel[2]) - m_pfMean[nOutputIndex + 2 * m_nImageSize];
+        }
+    }
 
-	uchar *pucData = (uchar *)pDstImage->imageData;
-	int nStep = pDstImage->widthStep / sizeof(uchar);
-	int nChannel = pDstImage->nChannels;
-	int nOutputIndex = 0;
+    std::cout << "Reading Picture Done..." << std::endl;
 
-	for(int i = 0; i < pDstImage->height; i++)
-	{
-		for (int j = 0; j < pDstImage->width; j++)
-		{
-			nOutputIndex = i * m_nInputWidth + j;
-			m_pfInputData[nOutputIndex] = (float)pucData[i * nStep + j * nChannel + 0] - m_pfMean[nOutputIndex];
-			m_pfInputData[nOutputIndex + m_nImageSize] = (float)pucData[i * nStep + j * nChannel + 1] - m_pfMean[nOutputIndex + m_nImageSize];
-			m_pfInputData[nOutputIndex + 2 * m_nImageSize] = (float)pucData[i * nStep + j * nChannel + 2] - m_pfMean[nOutputIndex + 2 * m_nImageSize];
-		}
-	}
-	cout << "Reading Picture Done..." << endl;
-
-	return m_pfInputData;
+    return m_pfInputData;
 }
 
 void ReadData::ReadMean(const char *pcMean)
@@ -65,7 +61,10 @@ void ReadData::ReadMean(const char *pcMean)
 	FILE *pM;
     pM = fopen(pcMean, "rb");
 
-	assert(pM != NULL);
+	if (pM == NULL) {
+		std::cerr << "Error: Unable to open file " << pcMean << std::endl;
+		return;
+	}
 
 	nMsize = m_nInputSize;
 

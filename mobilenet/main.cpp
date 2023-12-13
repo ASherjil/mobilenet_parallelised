@@ -3,8 +3,8 @@
 
 int main()
 {
-    test("..\\date\\test_list.txt",
-        "..\\date\\test_labels.txt",
-        "..\\date\\images\\");
+    test("../../data/test_list.txt",
+         "../../data/test_labels.txt",
+         "../../data/images/");
     return 0;
 }

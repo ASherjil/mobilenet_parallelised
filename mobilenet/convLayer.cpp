@@ -80,30 +80,44 @@ void ConvLayer::forward(float *pfInput)
     }
 }
 
-void ConvLayer::ReadConvWb(const char *pcWname, const char *pcBname)
-{
+void ConvLayer::ReadConvWb(const char *pcWname, const char *pcBname) {
     int nWsize, nBsize, nWreadsize, nBreadsize;
     FILE *pW, *pB;
+
+    // Read weights
     pW = fopen(pcWname, "rb");
-    
-    assert(pW != NULL);
+    if (pW == nullptr) {
+        std::cerr << "Error: Unable to open weight file " << pcWname << std::endl;
+        return;
+    }
 
     nWsize = m_nOutputNum * m_nInputGroupNum * m_nKernelSize;
-	nWreadsize = fread(m_pfWeight, sizeof(float), nWsize, pW);
+    nWreadsize = fread(m_pfWeight, sizeof(float), nWsize, pW);
     fclose(pW);
-    cout << "w: " << nWreadsize << endl;
 
+    if (nWreadsize != nWsize) {
+        std::cerr << "Error: Read " << nWreadsize << " elements, expected " << nWsize << " elements from weight file." << std::endl;
+    } else {
+        std::cout << "Weights read successfully: " << nWreadsize << " elements." << std::endl;
+    }
 
-    if (pcBname != NULL)
-    {
+    // Read biases
+    if (pcBname != nullptr) {
         pB = fopen(pcBname, "rb");
-        assert(pB != NULL);
-        nBsize = m_nOutputNum;
+        if (pB == nullptr) {
+            std::cerr << "Error: Unable to open bias file " << pcBname << std::endl;
+            return;
+        }
 
+        nBsize = m_nOutputNum;
         nBreadsize = fread(m_pfBias, sizeof(float), nBsize, pB);
         fclose(pB);
-        assert(nBreadsize <= nBsize);
-        cout << "b: " << nBreadsize << endl;
+
+        if (nBreadsize != nBsize) {
+            std::cerr << "Error: Read " << nBreadsize << " elements, expected " << nBsize << " elements from bias file." << std::endl;
+        } else {
+            std::cout << "Biases read successfully: " << nBreadsize << " elements." << std::endl;
+        }
     }
 }
 
