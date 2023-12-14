@@ -84,12 +84,12 @@ void test(const char *pcTestListFile, const char *pcTestLabelsFile, const char *
 
     cout << "i:" << i << endl;
 
-    float fAccurSum_1 = fAccuracy_1 / i;
-    float fAccurSum_all = fAccuracy_all / i;
+    float fAccurSum_1 = (fAccuracy_1 / i)*100;
+    float fAccurSum_all = (fAccuracy_all / i)*100;
 
-    cout << "accuracy_1:" << fAccurSum_1 << endl;
-    cout << "accuracy_all:" << fAccurSum_all << endl;
-    cout << "Processing time: " << duration << " ms" << endl;
+    cout << "accuracy_1:"   << fAccurSum_1     << "%"<<endl;
+    cout << "accuracy_all:" << fAccurSum_all << "%"<<endl;
+    cout << "Processing time: " << duration  << " ms" << endl;
 
     //system("pause");
 	

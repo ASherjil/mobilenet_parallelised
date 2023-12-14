@@ -1,1 +1,10 @@
+indoor.jpg
+portrait.jpg
+green_plant.jpg
+shopping_mall.jpg
+beach.jpg
+sunset.jpg
 blue_sky.jpg
+snow_scene.jpg
+night_scene.jpg
+text.jpg

@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
     std::cout << "Using " << numThreads << " threads.\n";
 
     // Your function call
-    test("../../data/test_list.txt",
+    test("../../data/test_list (copy).txt",
          "../../data/test_labels.txt",
          "../../data/images/");
     
