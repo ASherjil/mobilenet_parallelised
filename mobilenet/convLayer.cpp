@@ -5,6 +5,7 @@
 #include <cassert>
 #include <iostream>
 #include <omp.h>
+#include <sstream> 
 
 using namespace std;
 
@@ -46,11 +47,16 @@ void ConvLayer::forward(float *pfInput)
 {
     Addpad(pfInput);
 
+    std::ostringstream debug_msg;
+    debug_msg << "Convolution layer params m_nGroup " << m_nGroup
+            << ", m_nOutputGroupNum " << m_nOutputGroupNum
+            << ", m_nOutputWidth" << m_nOutputWidth
+            << ", m_nInputGroupNum " << m_nInputGroupNum
+            << ", m_nKernelWidth " << m_nKernelWidth;
 
-    //std::cout<<"Convolution layer params m_nGroup "<<m_nGroup<<", m_nOutputGroupNum "<<m_nOutputGroupNum<<", m_nOutputWidth"<<m_nOutputWidth<<", m_nInputGroupNum "
-    //         <<m_nInputGroupNum << ", m_nKernelWidth "<<m_nKernelWidth<<"\n";
+    DEBUG_PRINT(debug_msg.str());
 
-    #pragma omp parallel for collapse(3) schedule(guided)
+    #pragma omp parallel for collapse(3) schedule(static)
     for (int g = 0; g < m_nGroup; g++)
     {
         for (int nOutmapIndex = 0; nOutmapIndex < m_nOutputGroupNum; nOutmapIndex++)

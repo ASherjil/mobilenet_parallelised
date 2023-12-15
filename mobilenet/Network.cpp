@@ -2,6 +2,7 @@
 #include <vector>
 #include <iostream>
 #include <string>
+#include <sstream> // Include this for std::stringstream
 
 using namespace std;
 
@@ -163,12 +164,13 @@ float *Network::Forward(const char *pcName)
 			Max.push_back(pfOutput[i]);
 		}
 	}
-	//cout << endl;
-	//for (int i = 0; i < argmax.size(); i++)
-	//{
-	//	cout << Max[i] << ": " << argmax[i] << ": " << m_vcClass[argmax[i]] << endl;
-	//}
-	//cout << endl;
+    DEBUG_PRINT("");
+    for (int i = 0; i < argmax.size(); i++) {
+        std::stringstream ss;
+        ss << Max[i] << ": " << argmax[i] << ": " << m_vcClass[argmax[i]];
+        DEBUG_PRINT(ss.str());
+    }
+    DEBUG_PRINT("");
     
     return pfOutput;
 }

@@ -2,6 +2,16 @@
 #define CONVLAYER_H
 #include <string>
 
+/// @brief Global to print debug information 
+extern bool g_DebugMode;
+
+#define DEBUG_PRINT(msg) \
+    do { \
+        if (g_DebugMode) { \
+            std::cout << msg << std::endl; \
+        } \
+    } while (0)
+
 class ConvLayer
 {
 public:

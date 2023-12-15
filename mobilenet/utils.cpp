@@ -91,6 +91,10 @@ void test(const char *pcTestListFile, const char *pcTestLabelsFile, const char *
     cout << "accuracy_all:" << fAccurSum_all << "%"<<endl;
     cout << "Processing time: " << duration  << " ms" << endl;
 
+    if (writeDataToFile){
+        writeToFile(duration, "mobilenet_static", numThreads, "../../BenchmarkTimes");
+    }
+
     //system("pause");
 	
     // You can use following codes to test only one image
@@ -100,4 +104,24 @@ void test(const char *pcTestListFile, const char *pcTestLabelsFile, const char *
     network.Forward(".\\data\\1.jpg");
     system("pause");
     */
+}
+
+void writeToFile(double benchmark_time, const std::string& file_name, int threads, const std::filesystem::path& folder_path) {
+    // Construct the full path with the folder path, file name, and number of threads
+    auto full_path = folder_path / (file_name + "_" + std::to_string(threads) + "threads.txt");
+
+    // Create the directory if it does not exist
+    if (!std::filesystem::exists(folder_path)) {
+        std::filesystem::create_directory(folder_path);
+    }
+
+    // Open the file for appending (creates file if it doesn't exist)
+    std::ofstream file(full_path, std::ios::app);
+    if (!file) {
+        std::cerr << "Error opening file: " << full_path << std::endl;
+        return;
+    }
+
+    // Write the benchmark time to the file
+    file << benchmark_time << '\n';
 }
