@@ -97,7 +97,6 @@ Network::~Network()
 {
 	delete m_Readdata;
     delete m_Layers_bn;
-    delete m_Layers_ds1;
     delete m_Layers_ds2_1;
     delete m_Layers_ds2_2;
     delete m_Layers_ds3_1;

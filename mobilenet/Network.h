@@ -34,7 +34,7 @@ private:
     ReadData *m_Readdata;
 
     Layers_Bn *m_Layers_bn;
-    Layers_Ds *m_Layers_ds1, *m_Layers_ds2_1, *m_Layers_ds2_2, *m_Layers_ds3_1, *m_Layers_ds3_2, *m_Layers_ds4_1, *m_Layers_ds4_2,
+    Layers_Ds *m_Layers_ds2_1, *m_Layers_ds2_2, *m_Layers_ds3_1, *m_Layers_ds3_2, *m_Layers_ds4_1, *m_Layers_ds4_2,
         *m_Layers_ds5_1, *m_Layers_ds5_2, *m_Layers_ds5_3, *m_Layers_ds5_4, *m_Layers_ds5_5, *m_Layers_ds5_6, *m_Layers_ds6;
 
     ConvLayer *m_Convlayer7;
